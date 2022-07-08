@@ -1,0 +1,8 @@
+div[data-view] {
+  margin: 0 auto;
+  width: 90%;
+}
+
+label {
+  display: block;
+}
