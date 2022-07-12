@@ -1,11 +1,3 @@
-/* Test-use stuff:
-Ada Lovelace
-https://media.newyorker.com/photos/590952556552fa0be682c157/master/w_2560%2Cc_limit/ada-lovelace-290.jpeg
-Augusta Ada King, Countess of Lovelace was an
-English mathematician and writer, chiefly known for her
-work on Charles Babbage's proposed mechanical general-purpose
-computer, the Analytical Engine.
-*/
 
 var $photoUrl = document.querySelector('input#p-url');
 var $photoPreview = document.querySelector('img');
