@@ -9,7 +9,8 @@ h3 {
 
 img {
   width: 100%;
-  height: 400px;
+  max-width: 500px;
+  height: 350px;
 }
 
 label {
@@ -22,8 +23,15 @@ input,
 textarea {
   margin-top: 5px;
   width: 100%;
+  max-width: 500px;
+  height: 30px;
   border-radius: 3px;
   border-color: #ccc;
+}
+
+textarea {
+  height: 100px;
+  max-width: 100%;
 }
 
 button {
