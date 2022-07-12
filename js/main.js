@@ -6,7 +6,7 @@ $photoUrl.addEventListener('input', function (e) {
 });
 
 var $entryForm = document.querySelector("[data-view='entry-form'] > form");
-var $formInputs = document.querySelectorAll('input');
+var $formInputs = document.querySelectorAll('input, textarea');
 
 function submitHandler(event) {
   event.preventDefault();
@@ -15,7 +15,7 @@ function submitHandler(event) {
     const inputName = $formInputs[i].getAttribute('name');
     dataPoint[inputName] = $formInputs[i].value;
   }
-  dataPoint.nextEntryId = data.nextEntryId;
+  dataPoint.entryId = data.nextEntryId;
   data.nextEntryId += 1;
   data.entries.unshift(dataPoint);
   $photoPreview.setAttribute('src', 'images/placeholder-image-square.jpg');
