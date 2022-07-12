@@ -1,0 +1,60 @@
+h3 {
+  color: whitesmoke;
+  background-color: rgb(67, 0, 83);
+  margin-top: 0;
+  padding-top: 12px;
+  padding-left: 25px;
+  height: 50px;
+}
+
+img {
+  width: 100%;
+  max-width: 500px;
+  height: 350px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+input,
+textarea {
+  margin-top: 5px;
+  width: 100%;
+  max-width: 500px;
+  height: 30px;
+  border-radius: 3px;
+  border-color: #ccc;
+}
+
+textarea {
+  height: 100px;
+  max-width: 100%;
+}
+
+button {
+  display: inline-block;
+  background-color: rgb(67, 0, 83);
+  color: whitesmoke;
+  border-radius: 5px;
+  width: 66px;
+  height: 30px;
+  margin-bottom: 50px;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+input:focus,
+textarea:focus {
+  border: 3px solid rgb(107, 0, 134);
+  outline: none;
+}
+
+.no-wrap {
+  flex-wrap: no-wrap;
+}
