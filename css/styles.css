@@ -3,6 +3,11 @@ div[data-view] {
   width: 90%;
 }
 
+img {
+  width: 250px;
+  height: 300px;
+}
+
 label {
   display: block;
 }
