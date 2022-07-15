@@ -23,3 +23,48 @@ function submitHandler(event) {
 }
 
 $entryForm.addEventListener('submit', submitHandler);
+
+/*
+<li>
+  <img src="https://www.freecodecamp.org/news/content/images/size/w2000/2022/06/pankaj-patel-1IW4HQuauSU-unsplash.jpg">
+    <h3 class="title">JavaScript</h3>
+    <p class="notes">JavaScript, often abbreviated JS, is a programming language that is one of the core technologies of the World Wide Web,
+      alongside HTML and CSS. As of 2022, 98% of websites use JavaScript on the client side for web page behavior,
+      often incorporating third-party libraries. All major web browsers have a dedicated JavaScript engine to execute the
+      code on users' devices.</p>
+</li>
+*/
+
+function renderEntry(entry) {
+  const $newListItem = document.createElement('li');
+  const title = entry.title;
+  const pUrl = entry['p-url'];
+  const notes = entry.notes;
+
+  const $entryImage = document.createElement('img');
+  $entryImage.setAttribute('src', pUrl);
+
+  const $entryTitle = document.createElement('h3');
+  $entryTitle.setAttribute('class', 'title');
+  $entryTitle.textContent = title;
+
+  const $entryNotes = document.createElement('p');
+  $entryNotes.setAttribute('class', 'notes');
+  $entryNotes.textContent = notes;
+
+  $newListItem.appendChild($entryImage);
+  $newListItem.appendChild($entryTitle);
+  $newListItem.appendChild($entryNotes);
+  return $newListItem;
+}
+
+function createEntries(event) {
+  var unorderedList = document.querySelector('ul');
+  for (let i = 0; i < data.entries.length; i++) {
+    const entry = renderEntry(data.entries[i]);
+    unorderedList.appendChild(entry);
+  }
+  return unorderedList;
+}
+
+window.addEventListener('DOMContentLoaded', createEntries);
