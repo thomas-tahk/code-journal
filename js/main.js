@@ -59,7 +59,7 @@ function renderEntry(entry) {
 }
 
 function createEntries(event) {
-  var unorderedList = document.querySelector('ul');
+  var unorderedList = document.querySelector('#entries-list');
   for (let i = 0; i < data.entries.length; i++) {
     const entry = renderEntry(data.entries[i]);
     unorderedList.appendChild(entry);
@@ -68,3 +68,24 @@ function createEntries(event) {
 }
 
 window.addEventListener('DOMContentLoaded', createEntries);
+
+var $entriesPage = document.querySelector("[data-view='entries']");
+var $entryFormPage = document.querySelector("[data-view='entry-form']");
+
+// var $entriesButton = document.querySelector('.not-button');
+// var $newEntryButton = document.querySelector('.button-like');
+
+var $navBar = document.querySelector('#navbar');
+var $entriesWrapper = document.querySelector('.wrapper');
+
+function hiddenToggler(event) {
+  if (event.target.matches('.not-button')) {
+    $entriesPage.classList.remove('hidden');
+    $entryFormPage.classList.add('hidden');
+  } else if (event.target.matches('.button-like')) {
+    $entriesPage.classList.add('hidden');
+    $entryFormPage.classList.remove('hidden');
+  }
+}
+$navBar.addEventListener('click', hiddenToggler);
+$entriesWrapper.addEventListener('click', hiddenToggler);

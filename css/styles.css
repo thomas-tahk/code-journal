@@ -1,10 +1,22 @@
-header > h3 {
-  color: whitesmoke;
+ul {
+  list-style-type: none;
+}
+
+.nav-container {
+  height: 50px;
   background-color: rgb(67, 0, 83);
+}
+
+.nav-container > h3 {
+  color: whitesmoke;
   margin-top: 0;
   padding-top: 12px;
   padding-left: 25px;
-  height: 50px;
+}
+
+#navbar > li a {
+  color: whitesmoke;
+  text-decoration: none;
 }
 
 img {
@@ -59,6 +71,21 @@ textarea:focus {
   flex-wrap: no-wrap;
 }
 
-ul {
-  list-style-type: none;
+.wrapper {
+  display: flex;
+  position: relative;
+}
+
+.button-like {
+  background-color: rgb(67, 0, 83);
+  color: whitesmoke;
+  border-radius: 5px;
+  width: 66px;
+  height: 30px;
+  padding-top: 6px;
+  text-decoration: none;
+  text-align: center;
+  position: absolute;
+  right: 0;
+  top: 15px;
 }

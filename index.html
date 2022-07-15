@@ -17,11 +17,16 @@
 </head>
 <body>
   <header>
-    <h3>Code Journal</h3>
+    <div class="nav-container row">
+      <h3>Code Journal</h3>
+      <ul id="navbar">
+        <li><a class="not-button" href="#">Entries</a></li>
+      </ul>
+    </div>
   </header>
   <main>
     <div class="container">
-      <div data-view="entry-form">
+      <div class="hidden" data-view="entry-form">
         <form>
           <h2>New Entry</h2>
           <div class="row no-wrap">
@@ -48,7 +53,11 @@
       </div>
       <div data-view="entries">
         <div class="column-half">
-          <ul>
+          <div class="wrapper">
+            <h3>Entries</h3>
+            <a class="button-like" href="#">NEW</a>
+          </div>
+          <ul id="entries-list">
           </ul>
         </div>
       </div>
