@@ -32,12 +32,15 @@ $entryForm.addEventListener('submit', submitHandler);
 
 /*
 <li>
-  <div class = row no-wrap>
+  <div class="row no-wrap">
     <div class="half-column">
       <img src="https://www.freecodecamp.org/news/content/images/size/w2000/2022/06/pankaj-patel-1IW4HQuauSU-unsplash.jpg">
     </div>
     <div class="half-column">
-      <h3 class="title">JavaScript</h3>
+      <div class="wrapper">
+        <h3 class="title">JavaScript</h3>
+        <i class="fa-solid fa-pencil fa-lg"></i>
+      </div>
       <p class="notes">JavaScript, often abbreviated JS, is a programming language that is one of the core technologies of the World Wide Web,
         alongside HTML and CSS. As of 2022, 98% of websites use JavaScript on the client side for web page behavior,
         often incorporating third-party libraries. All major web browsers have a dedicated JavaScript engine to execute the
@@ -49,6 +52,7 @@ $entryForm.addEventListener('submit', submitHandler);
 
 function renderEntry(entry) {
   const $newListItem = document.createElement('li');
+  $newListItem.setAttribute('data-entry-id', entry.entryId);
   const title = entry.title;
   const pUrl = entry['p-url'];
   const notes = entry.notes;
@@ -59,6 +63,19 @@ function renderEntry(entry) {
   const $entryTitle = document.createElement('h3');
   $entryTitle.setAttribute('class', 'title');
   $entryTitle.textContent = title;
+
+  const $editIcon = document.createElement('i');
+  $editIcon.classList.add('fa-solid');
+  $editIcon.classList.add('fa-pencil');
+  $editIcon.classList.add('fa-lg');
+  const $editIconLink = document.createElement('a');
+  $editIconLink.setAttribute('href', '#');
+  $editIconLink.appendChild($editIcon);
+
+  const $titleAndIcon = document.createElement('div');
+  $titleAndIcon.classList.add('wrapper');
+  $titleAndIcon.appendChild($entryTitle);
+  $titleAndIcon.appendChild($editIconLink);
 
   const $entryNotes = document.createElement('p');
   $entryNotes.setAttribute('class', 'notes');
@@ -73,7 +90,7 @@ function renderEntry(entry) {
   $halfColumnRight.classList.add('column-half');
 
   $halfColumnLeft.appendChild($entryImage);
-  $halfColumnRight.appendChild($entryTitle);
+  $halfColumnRight.appendChild($titleAndIcon);
   $halfColumnRight.appendChild($entryNotes);
   $rowNoWrap.appendChild($halfColumnLeft);
   $rowNoWrap.appendChild($halfColumnRight);

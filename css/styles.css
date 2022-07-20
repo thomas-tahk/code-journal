@@ -93,7 +93,7 @@ textarea:focus {
   top: 38px;
 }
 
-.wrapper > h3 {
+.entries-heading {
   font-size: 32px;
 }
 
@@ -108,4 +108,16 @@ textarea:focus {
 .title,
 .notes {
   margin: 6px;
+}
+
+.title {
+  font-size: 20px;
+}
+
+i {
+  position: absolute;
+  right: 0;
+  top: 16px;
+  width: 32px;
+  height: 32px;
 }
