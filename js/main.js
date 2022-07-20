@@ -91,8 +91,8 @@ function createEntries(event) {
   return $unorderedList;
 }
 
-window.addEventListener('DOMContentLoaded', createEntries);
 window.addEventListener('DOMContentLoaded', function (event) {
+  createEntries(event);
   hiddenToggler(data.view);
 });
 
