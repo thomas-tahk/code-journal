@@ -17,7 +17,12 @@
 </head>
 <body>
   <header>
-    <h3>Code Journal</h3>
+    <div class="nav-container row">
+      <h3>Code Journal</h3>
+      <ul id="navbar">
+        <li><a class="not-button" href="#">Entries</a></li>
+      </ul>
+    </div>
   </header>
   <main>
     <div class="container">
@@ -46,9 +51,17 @@
           </div>
         </form>
       </div>
+      <div data-view="entries">
+        <div class="column-full">
+          <div class="wrapper">
+            <h3>Entries</h3>
+            <a class="button-like" href="#">NEW</a>
+          </div>
+        </div>
+        <ul id="entries-list">
+        </ul>
+      </div>
     </div>
-
-
   </main>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
