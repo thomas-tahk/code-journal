@@ -1,9 +1,11 @@
 
 var $photoUrl = document.querySelector('input#p-url');
 var $photoPreview = document.querySelector('img');
-$photoUrl.addEventListener('input', function (e) {
+
+function photoChange(e) {
   $photoPreview.setAttribute('src', $photoUrl.value);
-});
+}
+$photoUrl.addEventListener('input', photoChange);
 
 var $entryForm = document.querySelector("[data-view='entry-form'] > form");
 var $formInputs = document.querySelectorAll('input, textarea');
@@ -39,7 +41,7 @@ $entryForm.addEventListener('submit', submitHandler);
     <div class="half-column">
       <div class="wrapper">
         <h3 class="title">JavaScript</h3>
-        <i class="fa-solid fa-pencil fa-lg"></i>
+        <a href="#"><i class="fa-solid fa-pencil fa-lg"></i></a>
       </div>
       <p class="notes">JavaScript, often abbreviated JS, is a programming language that is one of the core technologies of the World Wide Web,
         alongside HTML and CSS. As of 2022, 98% of websites use JavaScript on the client side for web page behavior,
@@ -137,5 +139,26 @@ $navBar.addEventListener('click', function (event) {
 $entriesWrapper.addEventListener('click', function (event) {
   if (event.target.matches('.button-like')) {
     hiddenToggler($entryFormPage.getAttribute('data-view'));
+  }
+});
+
+$unorderedList.addEventListener('click', function (event) {
+  if (event.target.matches('i')) {
+    hiddenToggler('entry-form');
+    // there must a better way to get the entryItem
+    var editItem = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
+    var editId = Number(editItem.getAttribute('data-entry-id'));
+    data.editing = data.entries[data.entries.length - editId];
+    for (let i = 0; i < $formInputs.length; i++) {
+      const inputName = $formInputs[i].getAttribute('name');
+      if (inputName === 'title') {
+        $formInputs[i].value = data.editing.title;
+      } else if (inputName === 'p-url') {
+        $formInputs[i].value = data.editing['p-url'];
+        photoChange(event);
+      } else if (inputName === 'notes') {
+        $formInputs[i].value = data.editing.notes;
+      }
+    }
   }
 });
