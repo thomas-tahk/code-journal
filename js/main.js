@@ -14,17 +14,33 @@ var $unorderedList = document.querySelector('#entries-list');
 
 function submitHandler(event) {
   event.preventDefault();
-  var dataPoint = {};
-  for (let i = 0; i < $formInputs.length; i++) {
-    const inputName = $formInputs[i].getAttribute('name');
-    dataPoint[inputName] = $formInputs[i].value;
+  if (data.editing === null) {
+    var dataPoint = {};
+    for (let i = 0; i < $formInputs.length; i++) {
+      const inputName = $formInputs[i].getAttribute('name');
+      dataPoint[inputName] = $formInputs[i].value;
+    }
+    dataPoint.entryId = data.nextEntryId;
+    data.nextEntryId += 1;
+    data.entries.unshift(dataPoint);
+    $unorderedList.prepend(renderEntry(dataPoint));
+  } else if (data.editing !== null) {
+    var editEntry = data.entries[data.entries.length - data.editing.entryId];
+    for (let i = 0; i < $formInputs.length; i++) {
+      const inputName = $formInputs[i].getAttribute('name');
+      if (editEntry[inputName] !== $formInputs[i].value) {
+        editEntry[inputName] = $formInputs[i].value;
+      }
+    }
+    var $editEntree = document.querySelector(`[data-entry-id="${editEntry.entryId}"]`);
+    var newEntree = renderEntry(editEntry);
+    $editEntree.replaceWith(newEntree);
+    // reset editing to null
+    data.editing = null;
   }
-  dataPoint.entryId = data.nextEntryId;
-  data.nextEntryId += 1;
-  data.entries.unshift(dataPoint);
-  // update entries and show entries page without reload
-  $unorderedList.prepend(renderEntry(dataPoint));
+
   hiddenToggler('entries');
+
   // reset form
   $photoPreview.setAttribute('src', 'images/placeholder-image-square.jpg');
   $entryForm.reset();
@@ -145,7 +161,7 @@ $entriesWrapper.addEventListener('click', function (event) {
 $unorderedList.addEventListener('click', function (event) {
   if (event.target.matches('i')) {
     hiddenToggler('entry-form');
-    // there must a better way to get the entryItem
+    // is there a better way to get the li that contains entry elements?
     var editItem = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
     var editId = Number(editItem.getAttribute('data-entry-id'));
     data.editing = data.entries[data.entries.length - editId];
@@ -153,10 +169,12 @@ $unorderedList.addEventListener('click', function (event) {
       const inputName = $formInputs[i].getAttribute('name');
       if (inputName === 'title') {
         $formInputs[i].value = data.editing.title;
-      } else if (inputName === 'p-url') {
+      }
+      if (inputName === 'p-url') {
         $formInputs[i].value = data.editing['p-url'];
         photoChange(event);
-      } else if (inputName === 'notes') {
+      }
+      if (inputName === 'notes') {
         $formInputs[i].value = data.editing.notes;
       }
     }
