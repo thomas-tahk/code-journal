@@ -1,9 +1,11 @@
 
 var $photoUrl = document.querySelector('input#p-url');
 var $photoPreview = document.querySelector('img');
-$photoUrl.addEventListener('input', function (e) {
+
+function photoChange(e) {
   $photoPreview.setAttribute('src', $photoUrl.value);
-});
+}
+$photoUrl.addEventListener('input', photoChange);
 
 var $entryForm = document.querySelector("[data-view='entry-form'] > form");
 var $formInputs = document.querySelectorAll('input, textarea');
@@ -12,17 +14,38 @@ var $unorderedList = document.querySelector('#entries-list');
 
 function submitHandler(event) {
   event.preventDefault();
-  var dataPoint = {};
-  for (let i = 0; i < $formInputs.length; i++) {
-    const inputName = $formInputs[i].getAttribute('name');
-    dataPoint[inputName] = $formInputs[i].value;
+  if (data.editing === null) {
+    var dataPoint = {};
+    for (let i = 0; i < $formInputs.length; i++) {
+      const inputName = $formInputs[i].getAttribute('name');
+      dataPoint[inputName] = $formInputs[i].value;
+    }
+    dataPoint.entryId = data.nextEntryId;
+    data.nextEntryId += 1;
+    data.entries.unshift(dataPoint);
+    $unorderedList.prepend(renderEntry(dataPoint));
+  } else if (data.editing !== null) {
+    var editEntryId = data.editing.entryId;
+    for (let d = 0; d < data.entries.length; d++) {
+      if (data.entries[d].entryId === editEntryId) {
+        var editEntry = data.entries[d];
+      }
+    }
+    for (let i = 0; i < $formInputs.length; i++) {
+      const inputName = $formInputs[i].getAttribute('name');
+      if (editEntry[inputName] !== $formInputs[i].value) {
+        editEntry[inputName] = $formInputs[i].value;
+      }
+    }
+    var $editEntree = document.querySelector(`[data-entry-id="${editEntry.entryId}"]`);
+    var newEntree = renderEntry(editEntry);
+    $editEntree.replaceWith(newEntree);
+    // reset editing to null
+    data.editing = null;
   }
-  dataPoint.entryId = data.nextEntryId;
-  data.nextEntryId += 1;
-  data.entries.unshift(dataPoint);
-  // update entries and show entries page without reload
-  $unorderedList.prepend(renderEntry(dataPoint));
+
   hiddenToggler('entries');
+
   // reset form
   $photoPreview.setAttribute('src', 'images/placeholder-image-square.jpg');
   $entryForm.reset();
@@ -32,12 +55,15 @@ $entryForm.addEventListener('submit', submitHandler);
 
 /*
 <li>
-  <div class = row no-wrap>
+  <div class="row no-wrap">
     <div class="half-column">
       <img src="https://www.freecodecamp.org/news/content/images/size/w2000/2022/06/pankaj-patel-1IW4HQuauSU-unsplash.jpg">
     </div>
     <div class="half-column">
-      <h3 class="title">JavaScript</h3>
+      <div class="wrapper">
+        <h3 class="title">JavaScript</h3>
+        <a href="#"><i class="fa-solid fa-pencil fa-lg"></i></a>
+      </div>
       <p class="notes">JavaScript, often abbreviated JS, is a programming language that is one of the core technologies of the World Wide Web,
         alongside HTML and CSS. As of 2022, 98% of websites use JavaScript on the client side for web page behavior,
         often incorporating third-party libraries. All major web browsers have a dedicated JavaScript engine to execute the
@@ -49,6 +75,7 @@ $entryForm.addEventListener('submit', submitHandler);
 
 function renderEntry(entry) {
   const $newListItem = document.createElement('li');
+  $newListItem.setAttribute('data-entry-id', entry.entryId);
   const title = entry.title;
   const pUrl = entry['p-url'];
   const notes = entry.notes;
@@ -59,6 +86,19 @@ function renderEntry(entry) {
   const $entryTitle = document.createElement('h3');
   $entryTitle.setAttribute('class', 'title');
   $entryTitle.textContent = title;
+
+  const $editIcon = document.createElement('i');
+  $editIcon.classList.add('fa-solid');
+  $editIcon.classList.add('fa-pencil');
+  $editIcon.classList.add('fa-lg');
+  const $editIconLink = document.createElement('a');
+  $editIconLink.setAttribute('href', '#');
+  $editIconLink.appendChild($editIcon);
+
+  const $titleAndIcon = document.createElement('div');
+  $titleAndIcon.classList.add('wrapper');
+  $titleAndIcon.appendChild($entryTitle);
+  $titleAndIcon.appendChild($editIconLink);
 
   const $entryNotes = document.createElement('p');
   $entryNotes.setAttribute('class', 'notes');
@@ -73,7 +113,7 @@ function renderEntry(entry) {
   $halfColumnRight.classList.add('column-half');
 
   $halfColumnLeft.appendChild($entryImage);
-  $halfColumnRight.appendChild($entryTitle);
+  $halfColumnRight.appendChild($titleAndIcon);
   $halfColumnRight.appendChild($entryNotes);
   $rowNoWrap.appendChild($halfColumnLeft);
   $rowNoWrap.appendChild($halfColumnRight);
@@ -100,6 +140,7 @@ var $entriesPage = document.querySelector("[data-view='entries']");
 var $entryFormPage = document.querySelector("[data-view='entry-form']");
 var $navBar = document.querySelector('#navbar');
 var $entriesWrapper = document.querySelector('.wrapper');
+var formHeading = document.querySelector('h2');
 
 function hiddenToggler(string) {
   if (string === 'entries') {
@@ -119,6 +160,39 @@ $navBar.addEventListener('click', function (event) {
 });
 $entriesWrapper.addEventListener('click', function (event) {
   if (event.target.matches('.button-like')) {
+    // reset any previously existing entry form materials
+    $photoPreview.setAttribute('src', 'images/placeholder-image-square.jpg');
+    $entryForm.reset();
+
+    formHeading.textContent = 'New Entry';
     hiddenToggler($entryFormPage.getAttribute('data-view'));
+  }
+});
+
+$unorderedList.addEventListener('click', function (event) {
+  if (event.target.matches('i')) {
+    hiddenToggler('entry-form');
+    formHeading.textContent = 'Edit Entry';
+    // is there a better way to get the li that contains entry elements?
+    var editItem = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
+    var editId = Number(editItem.getAttribute('data-entry-id'));
+    for (let d = 0; d < data.entries.length; d++) {
+      if (data.entries[d].entryId === editId) {
+        data.editing = data.entries[d];
+      }
+    }
+    for (let i = 0; i < $formInputs.length; i++) {
+      const inputName = $formInputs[i].getAttribute('name');
+      if (inputName === 'title') {
+        $formInputs[i].value = data.editing.title;
+      }
+      if (inputName === 'p-url') {
+        $formInputs[i].value = data.editing['p-url'];
+        photoChange(event);
+      }
+      if (inputName === 'notes') {
+        $formInputs[i].value = data.editing.notes;
+      }
+    }
   }
 });
