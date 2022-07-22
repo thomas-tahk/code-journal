@@ -25,7 +25,12 @@ function submitHandler(event) {
     data.entries.unshift(dataPoint);
     $unorderedList.prepend(renderEntry(dataPoint));
   } else if (data.editing !== null) {
-    var editEntry = data.entries[data.entries.length - data.editing.entryId];
+    var editEntryId = data.editing.entryId;
+    for (let d = 0; d < data.entries.length; d++) {
+      if (data.entries[d].entryId === editEntryId) {
+        var editEntry = data.entries[d];
+      }
+    }
     for (let i = 0; i < $formInputs.length; i++) {
       const inputName = $formInputs[i].getAttribute('name');
       if (editEntry[inputName] !== $formInputs[i].value) {
@@ -171,7 +176,11 @@ $unorderedList.addEventListener('click', function (event) {
     // is there a better way to get the li that contains entry elements?
     var editItem = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
     var editId = Number(editItem.getAttribute('data-entry-id'));
-    data.editing = data.entries[data.entries.length - editId];
+    for (let d = 0; d < data.entries.length; d++) {
+      if (data.entries[d].entryId === editId) {
+        data.editing = data.entries[d];
+      }
+    }
     for (let i = 0; i < $formInputs.length; i++) {
       const inputName = $formInputs[i].getAttribute('name');
       if (inputName === 'title') {
