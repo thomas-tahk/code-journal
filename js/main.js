@@ -154,6 +154,9 @@ $navBar.addEventListener('click', function (event) {
 });
 $entriesWrapper.addEventListener('click', function (event) {
   if (event.target.matches('.button-like')) {
+    // reset any previously existing entry form materials
+    $photoPreview.setAttribute('src', 'images/placeholder-image-square.jpg');
+    $entryForm.reset();
     hiddenToggler($entryFormPage.getAttribute('data-view'));
   }
 });
