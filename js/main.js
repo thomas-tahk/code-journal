@@ -135,6 +135,7 @@ var $entriesPage = document.querySelector("[data-view='entries']");
 var $entryFormPage = document.querySelector("[data-view='entry-form']");
 var $navBar = document.querySelector('#navbar');
 var $entriesWrapper = document.querySelector('.wrapper');
+var formHeading = document.querySelector('h2');
 
 function hiddenToggler(string) {
   if (string === 'entries') {
@@ -157,6 +158,8 @@ $entriesWrapper.addEventListener('click', function (event) {
     // reset any previously existing entry form materials
     $photoPreview.setAttribute('src', 'images/placeholder-image-square.jpg');
     $entryForm.reset();
+
+    formHeading.textContent = 'New Entry';
     hiddenToggler($entryFormPage.getAttribute('data-view'));
   }
 });
@@ -164,6 +167,7 @@ $entriesWrapper.addEventListener('click', function (event) {
 $unorderedList.addEventListener('click', function (event) {
   if (event.target.matches('i')) {
     hiddenToggler('entry-form');
+    formHeading.textContent = 'Edit Entry';
     // is there a better way to get the li that contains entry elements?
     var editItem = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
     var editId = Number(editItem.getAttribute('data-entry-id'));
