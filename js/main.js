@@ -155,6 +155,7 @@ function hiddenToggler(string) {
 
 $navBar.addEventListener('click', function (event) {
   if (event.target.matches('.not-button')) {
+    deleteButton.classList.add('hidden');
     hiddenToggler($entriesPage.getAttribute('data-view'));
   }
 });
@@ -163,16 +164,30 @@ $entriesWrapper.addEventListener('click', function (event) {
     // reset any previously existing entry form materials
     $photoPreview.setAttribute('src', 'images/placeholder-image-square.jpg');
     $entryForm.reset();
-
     formHeading.textContent = 'New Entry';
+    deleteButton.classList.add('hidden');
     hiddenToggler($entryFormPage.getAttribute('data-view'));
   }
 });
+
+function renderDeleteButton() {
+  var newButton = document.createElement('button');
+  newButton.classList.add('unbutton');
+  newButton.classList.add('hidden');
+  newButton.setAttribute('type', 'button');
+  newButton.textContent = 'Delete Entry';
+  return newButton;
+}
+
+var $deleteWatcher = document.querySelector('.row > .column-full');
+$deleteWatcher.appendChild(renderDeleteButton());
+var deleteButton = document.querySelector('.unbutton');
 
 $unorderedList.addEventListener('click', function (event) {
   if (event.target.matches('i')) {
     hiddenToggler('entry-form');
     formHeading.textContent = 'Edit Entry';
+    deleteButton.classList.remove('hidden');
     // is there a better way to get the li that contains entry elements?
     var editItem = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
     var editId = Number(editItem.getAttribute('data-entry-id'));
@@ -194,5 +209,48 @@ $unorderedList.addEventListener('click', function (event) {
         $formInputs[i].value = data.editing.notes;
       }
     }
+  }
+});
+
+function renderModal() {
+  var newModal = document.createElement('div');
+  newModal.classList.add('hidden');
+  newModal.classList.add('modal');
+  var modalContent = document.createElement('div');
+  modalContent.classList.add('modal-content');
+  var confirmButton = document.createElement('button');
+  confirmButton.setAttribute('type', 'button');
+  confirmButton.classList.add('confirm');
+  confirmButton.textContent = 'Confirm';
+  var cancelButton = document.createElement('button');
+  cancelButton.setAttribute('type', 'button');
+  cancelButton.classList.add('cancel');
+  cancelButton.textContent = 'Cancel';
+  modalContent.appendChild(confirmButton);
+  modalContent.appendChild(cancelButton);
+  newModal.appendChild(modalContent);
+  return newModal;
+}
+
+$deleteWatcher.appendChild(renderModal());
+var $modal = document.querySelector('.modal');
+$deleteWatcher.addEventListener('click', function (e) {
+  $modal.classList.remove('hidden');
+  $modal.classList.add('modal-show');
+});
+
+// var $cancelButton = document.querySelector('.cancel');
+// var $confirmButton = document.querySelector('.confirm');
+var $modalContent = document.querySelector('.modal-content');
+$modalContent.addEventListener('click', function (e) {
+  if (event.target.matches('.cancel')) {
+    // why are the 2 lines below not happening? I can do what I want through console
+    $modal.classList.remove('modal-show');
+    $modal.classList.add('hidden');
+  } else if (event.target.matches('.confirm')) {
+    // add the removal features from data.entries and from the dom tree
+    //  first specify which entry and remove from data then use same reference?
+    //   to target the elemeent (li) on entries page
+    hiddenToggler('entries');
   }
 });
