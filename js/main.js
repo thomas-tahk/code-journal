@@ -214,10 +214,12 @@ $unorderedList.addEventListener('click', function (event) {
 
 function renderModal() {
   var newModal = document.createElement('div');
+  newModal.classList.add('modal-show');
   newModal.classList.add('hidden');
-  newModal.classList.add('modal');
   var modalContent = document.createElement('div');
   modalContent.classList.add('modal-content');
+  var confirmText = document.createElement('p');
+  confirmText.textContent = 'Are you sure you want to delete this entry?';
   var confirmButton = document.createElement('button');
   confirmButton.setAttribute('type', 'button');
   confirmButton.classList.add('confirm');
@@ -226,31 +228,44 @@ function renderModal() {
   cancelButton.setAttribute('type', 'button');
   cancelButton.classList.add('cancel');
   cancelButton.textContent = 'Cancel';
-  modalContent.appendChild(confirmButton);
+  modalContent.appendChild(confirmText);
   modalContent.appendChild(cancelButton);
+  modalContent.appendChild(confirmButton);
   newModal.appendChild(modalContent);
   return newModal;
 }
 
 $deleteWatcher.appendChild(renderModal());
-var $modal = document.querySelector('.modal');
-$deleteWatcher.addEventListener('click', function (e) {
-  $modal.classList.remove('hidden');
-  $modal.classList.add('modal-show');
+var $modal = document.querySelector('.modal-show');
+$deleteWatcher.addEventListener('click', function (event) {
+  if (event.target.matches('.unbutton')) {
+    $modal.classList.remove('hidden');
+  }
 });
 
-// var $cancelButton = document.querySelector('.cancel');
-// var $confirmButton = document.querySelector('.confirm');
 var $modalContent = document.querySelector('.modal-content');
-$modalContent.addEventListener('click', function (e) {
+$modalContent.addEventListener('click', function (event) {
   if (event.target.matches('.cancel')) {
-    // why are the 2 lines below not happening? I can do what I want through console
-    $modal.classList.remove('modal-show');
     $modal.classList.add('hidden');
+    event.stopPropagation();
   } else if (event.target.matches('.confirm')) {
-    // add the removal features from data.entries and from the dom tree
-    //  first specify which entry and remove from data then use same reference?
-    //   to target the elemeent (li) on entries page
+    // remove from data.entries
+    var currEditId = data.editing.entryId;
+    for (let d = 0; d < data.entries.length; d++) {
+      if (currEditId === data.entries[d].entryId) {
+        data.entries.splice(d, 1);
+      }
+    }
+    // remove from dom tree
+    var $allEntries = document.querySelectorAll('[data-entry-id]');
+    for (let i = 0; i < $allEntries.length; i++) {
+      if (currEditId === Number($allEntries[i].getAttribute('data-entry-id'))) {
+        $unorderedList.removeChild($allEntries[i]);
+      }
+    }
+    data.editing = null;
+    $modal.classList.add('hidden');
     hiddenToggler('entries');
+    event.stopPropagation();
   }
 });
