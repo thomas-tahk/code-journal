@@ -188,7 +188,7 @@ $unorderedList.addEventListener('click', function (event) {
     hiddenToggler('entry-form');
     formHeading.textContent = 'Edit Entry';
     deleteButton.classList.remove('hidden');
-    // is there a better way to get the li that contains entry elements?
+    // this seems like a bad way to access that ancestral li element
     var editItem = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
     var editId = Number(editItem.getAttribute('data-entry-id'));
     for (let d = 0; d < data.entries.length; d++) {
@@ -223,11 +223,11 @@ function renderModal() {
   var confirmButton = document.createElement('button');
   confirmButton.setAttribute('type', 'button');
   confirmButton.classList.add('confirm');
-  confirmButton.textContent = 'Confirm';
+  confirmButton.textContent = 'CONFIRM';
   var cancelButton = document.createElement('button');
   cancelButton.setAttribute('type', 'button');
   cancelButton.classList.add('cancel');
-  cancelButton.textContent = 'Cancel';
+  cancelButton.textContent = 'CANCEL';
   modalContent.appendChild(confirmText);
   modalContent.appendChild(cancelButton);
   modalContent.appendChild(confirmButton);

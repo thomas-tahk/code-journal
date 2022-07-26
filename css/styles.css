@@ -46,13 +46,12 @@ textarea {
 
 textarea {
   height: 100px;
-  max-width: 100%;
+  max-width: 95%;
 }
 
 .button-wrapper {
   display: flex;
-
-  /* justify-content: flex-end; */
+  justify-content: flex-end;
   position: relative;
 }
 
@@ -75,6 +74,11 @@ textarea {
   text-decoration: underline;
   cursor: pointer;
   margin-bottom: 22px;
+  color: rgb(255, 149, 110);
+}
+
+.unbutton:hover {
+  color: rgb(169, 45, 0);
 }
 
 input:focus,
@@ -154,23 +158,37 @@ h2 {
   position: relative;
   margin: auto;
   top: 15%;
-  width: 66%;
-  height: 40vh;
+  width: 77%;
+  height: 33%;
   background-color: white;
   border-radius: 4px;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  text-align: center;
   flex-flow: row wrap;
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.modal-content > p {
+  width: 100%;
+  margin: 0 auto;
+}
+
 .confirm {
-  width: 60px;
-  height: 50px;
+  width: 100px;
+  height: 42px;
+  background-color: orangered;
+  border-radius: 4px;
+  color: whitesmoke;
+  border-style: none;
 }
 
 .cancel {
-  width: 60px;
-  height: 50px;
+  width: 100px;
+  height: 42px;
+  border-radius: 4px;
+  background-color: grey;
+  color: black;
+  border-style: none;
 }
