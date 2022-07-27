@@ -155,6 +155,7 @@ function hiddenToggler(string) {
 
 $navBar.addEventListener('click', function (event) {
   if (event.target.matches('.not-button')) {
+    deleteButton.classList.add('hidden');
     hiddenToggler($entriesPage.getAttribute('data-view'));
   }
 });
@@ -163,17 +164,31 @@ $entriesWrapper.addEventListener('click', function (event) {
     // reset any previously existing entry form materials
     $photoPreview.setAttribute('src', 'images/placeholder-image-square.jpg');
     $entryForm.reset();
-
     formHeading.textContent = 'New Entry';
+    deleteButton.classList.add('hidden');
     hiddenToggler($entryFormPage.getAttribute('data-view'));
   }
 });
+
+function renderDeleteButton() {
+  var newButton = document.createElement('button');
+  newButton.classList.add('unbutton');
+  newButton.classList.add('hidden');
+  newButton.setAttribute('type', 'button');
+  newButton.textContent = 'Delete Entry';
+  return newButton;
+}
+
+var $deleteWatcher = document.querySelector('.row > .column-full');
+$deleteWatcher.appendChild(renderDeleteButton());
+var deleteButton = document.querySelector('.unbutton');
 
 $unorderedList.addEventListener('click', function (event) {
   if (event.target.matches('i')) {
     hiddenToggler('entry-form');
     formHeading.textContent = 'Edit Entry';
-    // is there a better way to get the li that contains entry elements?
+    deleteButton.classList.remove('hidden');
+    // this seems like a bad way to access that ancestral li element
     var editItem = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
     var editId = Number(editItem.getAttribute('data-entry-id'));
     for (let d = 0; d < data.entries.length; d++) {
@@ -194,5 +209,63 @@ $unorderedList.addEventListener('click', function (event) {
         $formInputs[i].value = data.editing.notes;
       }
     }
+  }
+});
+
+function renderModal() {
+  var newModal = document.createElement('div');
+  newModal.classList.add('modal-show');
+  newModal.classList.add('hidden');
+  var modalContent = document.createElement('div');
+  modalContent.classList.add('modal-content');
+  var confirmText = document.createElement('p');
+  confirmText.textContent = 'Are you sure you want to delete this entry?';
+  var confirmButton = document.createElement('button');
+  confirmButton.setAttribute('type', 'button');
+  confirmButton.classList.add('confirm');
+  confirmButton.textContent = 'CONFIRM';
+  var cancelButton = document.createElement('button');
+  cancelButton.setAttribute('type', 'button');
+  cancelButton.classList.add('cancel');
+  cancelButton.textContent = 'CANCEL';
+  modalContent.appendChild(confirmText);
+  modalContent.appendChild(cancelButton);
+  modalContent.appendChild(confirmButton);
+  newModal.appendChild(modalContent);
+  return newModal;
+}
+
+$deleteWatcher.appendChild(renderModal());
+var $modal = document.querySelector('.modal-show');
+$deleteWatcher.addEventListener('click', function (event) {
+  if (event.target.matches('.unbutton')) {
+    $modal.classList.remove('hidden');
+  }
+});
+
+var $modalContent = document.querySelector('.modal-content');
+$modalContent.addEventListener('click', function (event) {
+  if (event.target.matches('.cancel')) {
+    $modal.classList.add('hidden');
+    event.stopPropagation();
+  } else if (event.target.matches('.confirm')) {
+    // remove from data.entries
+    var currEditId = data.editing.entryId;
+    for (let d = 0; d < data.entries.length; d++) {
+      if (currEditId === data.entries[d].entryId) {
+        data.entries.splice(d, 1);
+      }
+    }
+    // remove from dom tree
+    var $allEntries = document.querySelectorAll('[data-entry-id]');
+    for (let i = 0; i < $allEntries.length; i++) {
+      if (currEditId === Number($allEntries[i].getAttribute('data-entry-id'))) {
+        $unorderedList.removeChild($allEntries[i]);
+      }
+    }
+    data.editing = null;
+    $modal.classList.add('hidden');
+    hiddenToggler('entries');
+    event.stopPropagation();
   }
 });
